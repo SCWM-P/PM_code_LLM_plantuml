@@ -1,0 +1,84 @@
+Activities:
+  - Id: A
+    Duration: 5
+    Activity: 'A'
+    Predecessors: []
+    Effort: 5
+    Resource: "Resource1"
+
+  - Id: B
+    Duration: 10
+    Activity: "B"
+    Predecessors: []
+    Effort: 10
+    Resource: "Resource2"
+
+  - Id: C
+    Duration: 11
+    Activity: "C"
+    Predecessors: []
+    Effort: 11
+    Resource: "Resource1"
+
+  - Id: D
+    Duration: 4
+    Activity: "D"
+    Predecessors: [B]
+    Effort: 4
+    Resource: "Resource1"
+
+  - Id: E
+    Duration: 4
+    Activity: "E"
+    Predecessors: [A]
+    Effort: 4
+    Resource: "Resource1"
+
+  - Id: F
+    Duration: 15
+    Activity: "F"
+    Predecessors: [C, D]
+    Effort: 15
+    Resource: "Resource1"
+
+  - Id: G
+    Duration: 21
+    Activity: "G"
+    Predecessors: [B, E]
+    Effort: 21
+    Resource: "Resource1"
+
+  - Id: H
+    Duration: 35
+    Activity: "H"
+    Predecessors: [B, E]
+    Effort: 35
+    Resource: "Resource1"
+
+  - Id: I
+    Duration: 25
+    Activity: "I"
+    Predecessors: [B, E]
+    Effort: 25
+    Resource: "Resource1"
+
+  - Id: J
+    Duration: 15
+    Activity: "J"
+    Predecessors: [F, G, I]
+    Effort: 15
+    Resource: "Resource1"
+
+  - Id: K
+    Duration: 20
+    Activity: "K"
+    Predecessors: [F, G]
+    Effort: 20
+    Resource: "Resource1"
+
+Resources:
+  - Id: Resource1
+    Pensum: 1.0
+
+  - Id: Resource2
+    Pensum: 1.0
