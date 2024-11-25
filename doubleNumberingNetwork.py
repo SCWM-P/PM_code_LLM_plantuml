@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import *
-from openai import OpenAI
+import openai
 import re
 from pathlib import Path
 from main.conversion import main, logging
@@ -8,9 +8,9 @@ import yaml
 import os
 import subprocess
 import time
-client = OpenAI(
+client = openai.OpenAI(
     base_url="https://api.moonshot.cn/v1",
-    api_key="sk-istt43mAK35LDd2qb4wTzH0sshgEA9e9MjTpERWjPBS6Q7fE",
+    api_key="sk-o2r7caUcIecAst0pc06cS8tqvL0hAXSr6gxz3g8txSZyOre1",
 )
 
 
@@ -25,20 +25,23 @@ def upload_and_get_answer(image_path):
                 "content": file_content,
             })
         return messages
+
     print("------------------------------1、调用Kimi API将图片转换为YAML格式的Markdown------------------------------")
     file_messages = _upload_files(files=["main/conversion.py", image_path])
     messages = [
         *file_messages,
         {
             "role": "system",
-            "content": "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，"
-                       "准确的回答。同时，你会拒绝一切涉及恐怖主义，种族歧视，黄色暴力等问题的回答。Moonshot AI 为专有名词，"
-                       "不可翻译成其他语言。",
+            "content":
+                "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，"
+                "准确的回答。同时，你会拒绝一切涉及恐怖主义，种族歧视，黄色暴力等问题的回答。Moonshot AI 为专有名词，"
+                "不可翻译成其他语言。"
+                "你尽可能回复关键信息，避免废话。",
         },
         {
             "role": "user",
             "content":
-                        '''
+                '''
                         请将图片中的内容转换为这个代码需要的YAML文件和markdown格式的表格,YAML文件请参考如下格式：
                         Activities:\n
                         - Id: A\n
@@ -62,7 +65,7 @@ def upload_and_get_answer(image_path):
                         markdown格式的表格请参考如下格式：\n
                         ```markdown
                         | 作业 | 计划完成时间/天 | 紧前作业 | 作业 | 计划完成时间/天 | 紧前作业 |\n
-                        |------|-----------------|----------|------|-----------------|----------|\n
+                        |:-----:|:------------:|:--------:|:----:|:------------:|:-------:|\n
                         | A    | 5               |     -    | G    | 21              | B,E        |\n
                         | B    | 10              |     -    | H    | 35               | B,E          |\n
                         | C    | 11              |     -    | I    | 25               | B,E          |\n
@@ -70,20 +73,25 @@ def upload_and_get_answer(image_path):
                         | E    | 4               |     A    | K    | 20               | F,G          |\n
                         | F    | 15               |     C,D    |      |                  |              |\n
                         ```
-                        '''
+                '''
         },
     ]
-    completion = client.chat.completions.create(
+
+    response = ""
+    # 使用OpenAI的ChatCompletion API，启用流式输出
+    for chunk in client.chat.completions.create(
         model="moonshot-v1-128k",
         messages=messages,
-    )
-    response = completion.choices[0].message.content
-    print("Kimi回复内容:")
-    print(response)
-    return response
+        stream=True
+    ):
+        delta = chunk.choices[0].delta
+        if delta.content:
+            response += delta.content
+            print(delta.content, end='', flush=True)
+            yield response
 
 
-def get_yaml(markdown_content, yaml_path: Path = "__temp__/output.yaml"):
+def get_yaml(markdown_content, yaml_path: Path = "__temp__/output_format.yaml"):
     print("------------------------------2、从回复中提取YAML内容------------------------------")
     time.sleep(1)
     # 使用正则表达式提取 YAML 内容
