@@ -25,7 +25,7 @@ map 4 {
     latest start => 9
 }
 map 5 {
-    earliest start => 31
+    earliest start => 29
     latest start => 30
 }
 map 6 {
@@ -42,11 +42,11 @@ map 7 {
 1 -[thickness=4]-> 4 : E (Id=E, D=4, TF=0, FF=1)
 2 --> 3 : D (Id=D, D=4, TF=1, FF=0)
 2 -[dashed]-> 4
-3 --> 5 : F (Id=F, D=15, TF=1, FF=2)
-4 --> 5 : G (Id=G, D=21, TF=-1, FF=0)
+3 --> 5 : F (Id=F, D=15, TF=1, FF=0)
+4 --> 5 : G (Id=G, D=21, TF=-1, FF=-2)
 4 --> 7 : H (Id=H, D=35, TF=5, FF=5)
 4 -[thickness=4]-> 6 : I (Id=I, D=25, TF=0, FF=0)
-5 --> 7 : K (Id=K, D=20, TF=-1, FF=-1)
+5 --> 7 : K (Id=K, D=20, TF=1, FF=1)
 5 -[dashed]-> 6
 6 -[thickness=4]-> 7 : J (Id=J, D=15, TF=0, FF=0)
 @enduml

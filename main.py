@@ -19,7 +19,11 @@ image_path = "__temp__/upload_image.jpg"
 yaml_path = Path("__temp__/output.yaml")
 txt_path = Path(yaml_path).with_suffix(".txt")
 output_path = Path(yaml_path).parents[0] / f"PERT.{output_format}"
-
+response = ""
+markdown_table = ""
+plantuml_text = ""
+img_content = None
+terminal_content = ""
 
 # 创建一个上下文管理器来捕获标准输出和错误
 @contextmanager
@@ -45,79 +49,82 @@ def capture_output():
 
 
 def process_image(image):
+    global response, markdown_table, plantuml_text, img_content, terminal_content
     def _load_svg(img_path):
         with open(img_path, 'r', encoding='utf-8') as f:
             return f.read()
 
     def _load_image(img_path):
         return Image.open(img_path)
+    if image is None:
+        return response, markdown_table, plantuml_text, img_content, terminal_content
+    else:
+        # 另存图片到__temp__目录用于处理
+        image.save(image_path)
+        # 初始化输出变量
+        response = ""
+        markdown_table = ""
+        plantuml_text = ""
+        img_content = None
+        terminal_content = ""
+        # 使用队列记录终端输出
+        terminal_queue.queue.clear()
+        # 开始处理，并逐步yield输出
+        yield response, markdown_table, plantuml_text, img_content, terminal_content
+        # 1. 使用大模型上传文件和图片提取信息
+        response_generator = dNN.upload_and_get_answer(image_path)
+        for partial_response in response_generator:
+            response = partial_response
+            while not terminal_queue.empty():
+                terminal_content += terminal_queue.get() + "\n"
+            # 更新AI回复部分
+            yield response, markdown_table, plantuml_text, img_content, terminal_content
 
-    # 另存图片到__temp__目录用于处理
-    image.save(image_path)
-    # 初始化输出变量
-    response = ""
-    markdown_table = ""
-    plantuml_text = ""
-    img_content = None
-    terminal_content = ""
-    # 使用队列记录终端输出
-    terminal_queue.queue.clear()
-    # 开始处理，并逐步yield输出
-    yield response, markdown_table, plantuml_text, img_content, terminal_content
-    # 1. 使用大模型上传文件和图片提取信息
-    response_generator = dNN.upload_and_get_answer(image_path)
-    for partial_response in response_generator:
-        response = partial_response
+        with capture_output():
+            # 2. 提取为YAML格式文件
+            yaml_content = dNN.get_yaml(response, yaml_path)
         while not terminal_queue.empty():
             terminal_content += terminal_queue.get() + "\n"
-        # 更新AI回复部分
         yield response, markdown_table, plantuml_text, img_content, terminal_content
 
-    with capture_output():
-        # 2. 提取为YAML格式文件
-        yaml_content = dNN.get_yaml(response, yaml_path)
-    while not terminal_queue.empty():
-        terminal_content += terminal_queue.get() + "\n"
-    yield response, markdown_table, plantuml_text, img_content, terminal_content
+        with capture_output():
+            # 3. 提取Markdown表格
+            markdown_table = dNN.get_md_chart(response)
+        while not terminal_queue.empty():
+            terminal_content += terminal_queue.get() + "\n"
+        yield response, markdown_table, plantuml_text, img_content, terminal_content
 
-    with capture_output():
-        # 3. 提取Markdown表格
-        markdown_table = dNN.get_md_chart(response)
-    while not terminal_queue.empty():
-        terminal_content += terminal_queue.get() + "\n"
-    yield response, markdown_table, plantuml_text, img_content, terminal_content
+        with capture_output():
+            # 4. 输出PlantUML
+            plantuml_text = dNN.convert_yaml2uml(yaml_path, txt_path)
+        while not terminal_queue.empty():
+            terminal_content += terminal_queue.get() + "\n"
+        yield response, markdown_table, plantuml_text, img_content, terminal_content
 
-    with capture_output():
-        # 4. 输出PlantUML
-        plantuml_text = dNN.convert_yaml2uml(yaml_path, txt_path)
-    while not terminal_queue.empty():
-        terminal_content += terminal_queue.get() + "\n"
-    yield response, markdown_table, plantuml_text, img_content, terminal_content
+        with capture_output():
+            # 5. 保存PlantUML为PERT图
+            dNN.convert_uml2pert(txt_path, output=output_format)
+        while not terminal_queue.empty():
+            terminal_content += terminal_queue.get() + "\n"
+        yield response, markdown_table, plantuml_text, img_content, terminal_content
 
-    with capture_output():
-        # 5. 保存PlantUML为PERT图
-        dNN.convert_uml2pert(txt_path, output=output_format)
-    while not terminal_queue.empty():
-        terminal_content += terminal_queue.get() + "\n"
-    yield response, markdown_table, plantuml_text, img_content, terminal_content
+        with capture_output():
+            # 6. 计算关键路径
+            dNN.calc_results(txt_path)
+        while not terminal_queue.empty():
+            terminal_content += terminal_queue.get() + "\n"
+        yield response, markdown_table, plantuml_text, img_content, terminal_content
 
-    with capture_output():
-        # 6. 计算关键路径
-        dNN.calc_results(txt_path)
-    while not terminal_queue.empty():
-        terminal_content += terminal_queue.get() + "\n"
-    yield response, markdown_table, plantuml_text, img_content, terminal_content
-
-    # 7. 读取生成的PERT图
-    if output_format == "svg":
-        img_content = _load_svg(output_path)
-    else:
-        img_content = _load_image(output_path)
-    # 8. 最终的终端信息
-    print("All processing completed successfully!")
-    while not terminal_queue.empty():
-        terminal_content += terminal_queue.get() + "\n"
-    yield response, markdown_table, plantuml_text, img_content, terminal_content
+        # 7. 读取生成的PERT图
+        if output_format == "svg":
+            img_content = _load_svg(output_path)
+        else:
+            img_content = _load_image(output_path)
+        # 8. 最终的终端信息
+        print("All processing completed successfully!")
+        while not terminal_queue.empty():
+            terminal_content += terminal_queue.get() + "\n"
+        yield response, markdown_table, plantuml_text, img_content, terminal_content
 
 
 # 创建Gradio界面
