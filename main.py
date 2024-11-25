@@ -4,7 +4,6 @@ from PIL import Image
 import os
 from contextlib import contextmanager
 import queue
-import threading
 from pathlib import Path
 import doubleNumberingNetwork as dNN
 
@@ -25,12 +24,13 @@ plantuml_text = ""
 img_content = None
 terminal_content = ""
 
+
 # 创建一个上下文管理器来捕获标准输出和错误
 @contextmanager
 def capture_output():
     class OutputCapture:
         def write(self, text):
-            if text.strip():  # 只有非空内容才加入队列
+            if text.strip():
                 terminal_queue.put(text)
 
         def flush(self):
@@ -131,15 +131,31 @@ def process_image(image):
 with gr.Blocks(
         css=
         """
-        #terminal-output {
+    #terminal-output {
         overflow: auto;
     }
     #AI-response {
         overflow: auto;
     }
+    .center-text {
+        text-align: center;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+    }
+    p {
+        text-align: left;
+    }
     """
 ) as demo:
-    gr.Markdown("# Image to Table/UML Converter")
+    gr.Markdown("# **📊 Image to Table & UML Converter**")
+    gr.Markdown(
+        "### 🙌这是一个通过大模型视觉能力将图片转换为表格和UML图表的demo🙌"
+    )
+    gr.Markdown(
+        "### 小组成员：彭博，卞政，冯泺宇，陈俊豪"
+    )
+
 
     with gr.Row():
         with gr.Column(scale=1):
