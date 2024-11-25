@@ -23,7 +23,6 @@ output_path = Path(yaml_path).parents[0] / f"PERT.{output_format}"
 
 # 创建一个上下文管理器来捕获标准输出和错误
 @contextmanager
-@contextmanager
 def capture_output():
     class OutputCapture:
         def write(self, text):
