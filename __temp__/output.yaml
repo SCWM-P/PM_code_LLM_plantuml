@@ -1,84 +1,83 @@
 Activities:
   - Id: A
-    Duration: 5
-    Activity: 'A'
+    Duration: 1
+    Activity: '初步研究'
     Predecessors: []
-    Effort: 5
-    Resource: "Resource1"
+    Effort: 1
+    Resource: "资源1"
 
   - Id: B
-    Duration: 10
-    Activity: "B"
-    Predecessors: []
-    Effort: 10
-    Resource: "Resource2"
+    Duration: 2
+    Activity: '研究选点'
+    Predecessors: ['A']
+    Effort: 2
+    Resource: "资源2"
 
   - Id: C
-    Duration: 11
-    Activity: "C"
-    Predecessors: []
-    Effort: 11
-    Resource: "Resource1"
+    Duration: 4
+    Activity: '准备调研方案'
+    Predecessors: ['A']
+    Effort: 4
+    Resource: "资源3"
 
   - Id: D
-    Duration: 4
-    Activity: "D"
-    Predecessors: [B]
-    Effort: 4
-    Resource: "Resource1"
+    Duration: 2
+    Activity: '联系调研点'
+    Predecessors: ['B']
+    Effort: 2
+    Resource: "资源4"
 
   - Id: E
-    Duration: 4
-    Activity: "E"
-    Predecessors: [A]
-    Effort: 4
-    Resource: "Resource1"
+    Duration: 3
+    Activity: '培训工作人员'
+    Predecessors: ['B', 'C']
+    Effort: 3
+    Resource: "资源5"
 
   - Id: F
-    Duration: 15
-    Activity: "F"
-    Predecessors: [C, D]
-    Effort: 15
-    Resource: "Resource1"
+    Duration: 1
+    Activity: '准备表格'
+    Predecessors: ['C']
+    Effort: 1
+    Resource: "资源6"
 
   - Id: G
-    Duration: 21
-    Activity: "G"
-    Predecessors: [B, E]
-    Effort: 21
-    Resource: "Resource1"
+    Duration: 5
+    Activity: '实地调研'
+    Predecessors: ['D', 'E', 'F']
+    Effort: 5
+    Resource: "资源7"
 
   - Id: H
-    Duration: 35
-    Activity: "H"
-    Predecessors: [B, E]
-    Effort: 35
-    Resource: "Resource1"
+    Duration: 2
+    Activity: '写调研报告'
+    Predecessors: ['G']
+    Effort: 2
+    Resource: "资源8"
 
   - Id: I
-    Duration: 25
-    Activity: "I"
-    Predecessors: [B, E]
-    Effort: 25
-    Resource: "Resource1"
-
-  - Id: J
-    Duration: 15
-    Activity: "J"
-    Predecessors: [F, G, I]
-    Effort: 15
-    Resource: "Resource1"
-
-  - Id: K
-    Duration: 20
-    Activity: "K"
-    Predecessors: [F, G]
-    Effort: 20
-    Resource: "Resource1"
+    Duration: 3
+    Activity: '开会汇总'
+    Predecessors: ['H']
+    Effort: 3
+    Resource: "资源9"
 
 Resources:
-  - Id: Resource1
+  - Id: 资源1
     Pensum: 1.0
-
-  - Id: Resource2
+  - Id: 资源2
+    Pensum: 1.0
+  - Id: 资源3
+    Pensum: 1.0
+  - Id: 资源4
+    Pensum: 1.0
+  - Id: 资源5
+    Pensum: 1.0
+  - Id: 资源6
+    Pensum: 1.0
+  - Id: 资源7
+    Pensum: 1.0
+  - Id: 资源8
+    Pensum: 1.0
+  - Id: 资源9
     Pensum: 1.0

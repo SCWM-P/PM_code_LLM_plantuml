@@ -5,7 +5,7 @@ import os
 from contextlib import contextmanager
 import queue
 from pathlib import Path
-import doubleNumberingNetwork as dNN
+import tools as tl
 
 # 创建一个临时目录来存储图片
 if not os.path.exists("__temp__"):
@@ -16,12 +16,16 @@ terminal_queue = queue.Queue()
 output_format = "svg"
 image_path = "__temp__/upload_image.jpg"
 yaml_path = Path("__temp__/output.yaml")
-txt_path = Path(yaml_path).with_suffix(".txt")
-output_path = Path(yaml_path).parents[0] / f"PERT.{output_format}"
+puml_path_sNN = Path(yaml_path).parents[0] / f"PUML_text_sNN.puml"
+puml_path_dNN = Path(yaml_path).parents[0] / f"PUML_text_dNN.puml"
+output_path_sNN = Path(yaml_path).parents[0] / f"PERT_sNN.{output_format}"
+output_path_dNN = Path(yaml_path).parents[0] / f"PERT_dNN.{output_format}"
 response = ""
 markdown_table = ""
-plantuml_text = ""
-img_content = None
+plantuml_text_sNN = ""
+plantuml_text_dNN = ""
+img_content_sNN = None
+img_output_dNN = None
 terminal_content = ""
 
 
@@ -49,7 +53,7 @@ def capture_output():
 
 
 def process_image(image):
-    global response, markdown_table, plantuml_text, img_content, terminal_content
+    global response, markdown_table, plantuml_text_sNN, plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
     def _load_svg(img_path):
         with open(img_path, 'r', encoding='utf-8') as f:
             return f.read()
@@ -57,7 +61,7 @@ def process_image(image):
     def _load_image(img_path):
         return Image.open(img_path)
     if image is None:
-        return response, markdown_table, plantuml_text, img_content, terminal_content
+        return response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
     else:
         # 另存图片到__temp__目录用于处理
         image.save(image_path)
@@ -65,66 +69,71 @@ def process_image(image):
         response = ""
         markdown_table = ""
         plantuml_text = ""
-        img_content = None
+        img_content_sNN = None
+        img_output_dNN = None
         terminal_content = ""
         # 使用队列记录终端输出
         terminal_queue.queue.clear()
         # 开始处理，并逐步yield输出
-        yield response, markdown_table, plantuml_text, img_content, terminal_content
+        yield response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
         # 1. 使用大模型上传文件和图片提取信息
-        response_generator = dNN.upload_and_get_answer(image_path)
+        response_generator = tl.upload_and_get_answer(image_path)
+        yield response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
         for partial_response in response_generator:
             response = partial_response
             while not terminal_queue.empty():
                 terminal_content += terminal_queue.get() + "\n"
             # 更新AI回复部分
-            yield response, markdown_table, plantuml_text, img_content, terminal_content
+            yield response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
 
         with capture_output():
             # 2. 提取为YAML格式文件
-            yaml_content = dNN.get_yaml(response, yaml_path)
+            yaml_content = tl.get_yaml(response, yaml_path)
         while not terminal_queue.empty():
             terminal_content += terminal_queue.get() + "\n"
-        yield response, markdown_table, plantuml_text, img_content, terminal_content
+        yield response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
 
         with capture_output():
             # 3. 提取Markdown表格
-            markdown_table = dNN.get_md_chart(response)
+            markdown_table = tl.get_md_chart(response)
         while not terminal_queue.empty():
             terminal_content += terminal_queue.get() + "\n"
-        yield response, markdown_table, plantuml_text, img_content, terminal_content
+        yield response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
 
         with capture_output():
             # 4. 输出PlantUML
-            plantuml_text = dNN.convert_yaml2uml(yaml_path, txt_path)
+            plantuml_text_dNN = tl.convert_yaml2uml(yaml_path, puml_path_dNN, network="double", quiet=False)
+            plantuml_text_sNN = tl.convert_yaml2uml(yaml_path, puml_path_sNN, network="single", quiet=True)
         while not terminal_queue.empty():
             terminal_content += terminal_queue.get() + "\n"
-        yield response, markdown_table, plantuml_text, img_content, terminal_content
+        yield response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
 
         with capture_output():
             # 5. 保存PlantUML为PERT图
-            dNN.convert_uml2pert(txt_path, output=output_format)
+            tl.convert_uml2pert(puml_path_sNN, output_path_sNN, output=output_format)
+            tl.convert_uml2pert(puml_path_dNN, output_path_dNN, output=output_format)
         while not terminal_queue.empty():
             terminal_content += terminal_queue.get() + "\n"
-        yield response, markdown_table, plantuml_text, img_content, terminal_content
+        yield response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
 
-        with capture_output():
-            # 6. 计算关键路径
-            dNN.calc_results(txt_path)
-        while not terminal_queue.empty():
-            terminal_content += terminal_queue.get() + "\n"
-        yield response, markdown_table, plantuml_text, img_content, terminal_content
-
-        # 7. 读取生成的PERT图
+        # 6. 读取生成的PERT图
         if output_format == "svg":
-            img_content = _load_svg(output_path)
+            img_content_sNN = _load_svg(output_path_sNN)
+            img_output_dNN = _load_svg(output_path_dNN)
         else:
-            img_content = _load_image(output_path)
-        # 8. 最终的终端信息
+            img_content_sNN = _load_image(output_path_sNN)
+            img_output_dNN = _load_image(output_path_dNN)
+        # 7. 最终的终端信息
         print("All processing completed successfully!")
         while not terminal_queue.empty():
             terminal_content += terminal_queue.get() + "\n"
-        yield response, markdown_table, plantuml_text, img_content, terminal_content
+        yield response, markdown_table, plantuml_text_sNN+"\n"+plantuml_text_dNN, img_content_sNN, img_output_dNN, terminal_content
+
+
+def load_example_image(example_path):
+    if example_path and os.path.exists(example_path):
+        return Image.open(example_path)
+    return None
 
 
 # 创建Gradio界面
@@ -146,6 +155,15 @@ with gr.Blocks(
     p {
         text-align: left;
     }
+    .gr-row {
+        align-items: stretch !important;  /* 强制底对齐 */
+    }
+    .result-images-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
     """
 ) as demo:
     gr.Markdown("# **📊 Image to Table & UML Converter**")
@@ -156,8 +174,7 @@ with gr.Blocks(
         "### 小组成员：彭博，卞政，冯泺宇，陈俊豪"
     )
 
-
-    with gr.Row():
+    with gr.Row(equal_height=True):
         with gr.Column(scale=1):
             # 左侧列
             image_input = gr.Image(
@@ -165,16 +182,29 @@ with gr.Blocks(
                 type="pil", interactive=True,
                 show_label=True,
             )
+            # 示例图片选择栏
+            example_file_paths = ["tests/图片_原始.png", "tests/图片_Excel.png", "tests/网图.png"]  # 示例图片路径
+            example_files_dropdown = gr.Dropdown(
+                choices=example_file_paths,
+                label="Select Example File",
+                value="Please select an example file...",
+                interactive=True
+            )
+            example_files_dropdown.change(
+                load_example_image,
+                inputs=[example_files_dropdown],
+                outputs=[image_input]
+            )
+            # markdown表格输出
             with gr.Accordion("Markdown Table Rendered Output", open=True):
                 table_output = gr.Markdown(
                     label="Rendered Table",
                     value="Table will appear here...",
                     container=True, show_label=True,
-                    height=300, max_height=500
                 )
+            # PlantUML输出
             plantuml_output = gr.Textbox(
                 label="PlantUML Code",
-                lines=10,
                 placeholder="Generating PlantUML code..."
             )
 
@@ -184,24 +214,30 @@ with gr.Blocks(
                 response_content = gr.Markdown(
                     label="AI Response (Markdown)",
                     container=True, show_label=True,
-                    height=500, max_height=800,
+                    max_height=500,
                     value="AI Response will appear here...",
                     elem_id="AI-response"
                 )
             with gr.Accordion("Terminal Output", open=True):
                 terminal_output = gr.Textbox(
-                            lines=10, max_lines=15,
                             interactive=False,
                             container=True, show_label=False,
                             elem_id="terminal-output"  # 为自定义样式指定ID
                         )
 
-    with gr.Row():
-        img_output = gr.HTML(
-            label="Network Diagram",
-        ) if output_format == "svg" else gr.Image(
-            label="Network Diagram"
-        )
+    with gr.Blocks():
+        with gr.Row(elem_classes="result-images-container"):
+            img_output_sNN = gr.HTML(
+                label="Network Diagram of Single Numbering Network",
+            ) if output_format == "svg" else gr.Image(
+                label="Network Diagram of Single Numbering Network"
+            )
+        with gr.Row(elem_classes="result-images-container"):
+            img_output_dNN = gr.HTML(
+                label="Network Diagram of Double Numbering Network",
+            ) if output_format == "svg" else gr.Image(
+                label="Network Diagram of Double Numbering Network"
+            )
 
     # 处理函数
     image_input.change(
@@ -211,7 +247,8 @@ with gr.Blocks(
             response_content,
             table_output,
             plantuml_output,
-            img_output,
+            img_output_sNN,
+            img_output_dNN,
             terminal_output
         ],
         queue=True,
