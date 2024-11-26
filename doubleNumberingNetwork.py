@@ -42,43 +42,43 @@ def upload_and_get_answer(image_path):
             "role": "user",
             "content":
                 '''
-                        请将图片中的内容转换为这个代码需要的YAML文件和markdown格式的表格,YAML文件请参考如下格式：
-                        Activities:\n
-                        - Id: A\n
-                        Duration: 5\n
-                        Activity: 'A"\n
-                        Predecessors: []\n
-                        Effort: 5\n
-                        Resource: "Resource1"\n
-                        - Id: B\n
-                        Duration: 10\n
-                        Activity: "B"\n
-                        Predecessors: []\n
-                        Effort: 10\n
-                        Resource: "Resource2"\n
-                        Resources:\n
-                        - Id: Resource1\n
-                        Pensum: 1.0\n
-                        - Id: Resource2\n
-                        Pensum: 1.0\n
-                        
-                        markdown格式的表格请参考如下格式：\n
-                        ```markdown
-                        | 作业 | 计划完成时间/天 | 紧前作业 | 作业 | 计划完成时间/天 | 紧前作业 |\n
-                        |:-----:|:------------:|:--------:|:----:|:------------:|:-------:|\n
-                        | A    | 5               |     -    | G    | 21              | B,E        |\n
-                        | B    | 10              |     -    | H    | 35               | B,E          |\n
-                        | C    | 11              |     -    | I    | 25               | B,E          |\n
-                        | D    | 4               |     B    | J    | 15               | F,G,I          |\n
-                        | E    | 4               |     A    | K    | 20               | F,G          |\n
-                        | F    | 15               |     C,D    |      |                  |              |\n
-                        ```
+                    请将图片中的内容转换为这个代码需要的YAML文件和markdown格式的表格,YAML文件请参考如下格式：
+                    Activities:\n
+                    - Id: A\n
+                    Duration: 5\n
+                    Activity: 'A"\n
+                    Predecessors: []\n
+                    Effort: 5\n
+                    Resource: "Resource1"\n
+                    - Id: B\n
+                    Duration: 10\n
+                    Activity: "B"\n
+                    Predecessors: []\n
+                    Effort: 10\n
+                    Resource: "Resource2"\n
+                    Resources:\n
+                    - Id: Resource1\n
+                    Pensum: 1.0\n
+                    - Id: Resource2\n
+                    Pensum: 1.0\n
+                    
+                    markdown格式的表格请参考如下格式：\n
+                    ```markdown
+                    | 作业 | 计划完成时间/天 | 紧前作业 | 作业 | 计划完成时间/天 | 紧前作业 |\n
+                    |:-----:|:------------:|:--------:|:----:|:------------:|:-------:|\n
+                    | A    | 5               |     -    | G    | 21              | B,E        |\n
+                    | B    | 10              |     -    | H    | 35               | B,E          |\n
+                    | C    | 11              |     -    | I    | 25               | B,E          |\n
+                    | D    | 4               |     B    | J    | 15               | F,G,I          |\n
+                    | E    | 4               |     A    | K    | 20               | F,G          |\n
+                    | F    | 15               |     C,D    |      |                  |              |\n
+                    ```
                 '''
         },
     ]
 
     response = ""
-    # 使用OpenAI的ChatCompletion API，启用流式输出
+    # 使用Kimi的ChatCompletion API，启用流式输出
     for chunk in client.chat.completions.create(
         model="moonshot-v1-128k",
         messages=messages,
