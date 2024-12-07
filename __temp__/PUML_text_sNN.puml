@@ -1,0 +1,108 @@
+
+@startuml PERT
+left to right direction
+' Horizontal lines: -->, <--, <-->
+' Vertical lines: ->, <-, <->
+title Pert: Project Design of Single Numbering Network
+map Start {
+    ES => 0
+    LS => 0
+    EF => 0
+    LF => 0
+    TF => 0
+    FF => 0
+}
+map A {
+    ES => 0
+    LS => 0
+    EF => 1
+    LF => 1
+    TF => 0
+    FF => 0
+}
+map B {
+    ES => 1
+    LS => 3
+    EF => 3
+    LF => 5
+    TF => 2
+    FF => 0
+}
+map C {
+    ES => 1
+    LS => 1
+    EF => 5
+    LF => 5
+    TF => 0
+    FF => 0
+}
+map D {
+    ES => 3
+    LS => 6
+    EF => 5
+    LF => 8
+    TF => 3
+    FF => 3
+}
+map E {
+    ES => 5
+    LS => 5
+    EF => 8
+    LF => 8
+    TF => 0
+    FF => 0
+}
+map F {
+    ES => 5
+    LS => 7
+    EF => 6
+    LF => 8
+    TF => 2
+    FF => 2
+}
+map G {
+    ES => 8
+    LS => 8
+    EF => 13
+    LF => 13
+    TF => 0
+    FF => 0
+}
+map H {
+    ES => 13
+    LS => 13
+    EF => 15
+    LF => 15
+    TF => 0
+    FF => 0
+}
+map I {
+    ES => 15
+    LS => 15
+    EF => 18
+    LF => 18
+    TF => 0
+    FF => 0
+}
+map End {
+    ES => 18
+    LS => 18
+    EF => 18
+    LF => 18
+    TF => 0
+    FF => 0
+}
+Start -[thickness=5]-> A
+A --> B
+A -[thickness=5]-> C
+B --> D
+B --> E
+C -[thickness=5]-> E
+C --> F
+D --> G
+E -[thickness=5]-> G
+F --> G
+G -[thickness=5]-> H
+H -[thickness=5]-> I
+I -[thickness=5]-> End
+@enduml
