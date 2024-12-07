@@ -160,8 +160,9 @@ with gr.Blocks(
     }
     .result-images-container {
         display: flex;
-        justify-content: center;
-        gap: 20px;
+        flex-direction: column;
+        justify-content: center; /* 居中容器中的子元素 */
+        align-items: center;     /* 子元素水平居中 */
         margin-top: 20px;
     }
     """
@@ -183,11 +184,11 @@ with gr.Blocks(
                 show_label=True,
             )
             # 示例图片选择栏
-            example_file_paths = ["tests/图片_原始.png", "tests/图片_Excel.png", "tests/网图.png"]  # 示例图片路径
+            example_file_paths = ["tests/图片_原始.png", "tests/图片_Excel.png", "tests/网图.png"]
             example_files_dropdown = gr.Dropdown(
                 choices=example_file_paths,
                 label="Select Example File",
-                value="Please select an example file...",
+                value=None,
                 interactive=True
             )
             example_files_dropdown.change(
@@ -214,7 +215,7 @@ with gr.Blocks(
                 response_content = gr.Markdown(
                     label="AI Response (Markdown)",
                     container=True, show_label=True,
-                    max_height=150,
+                    max_height=500,
                     value="AI Response will appear here...",
                     elem_id="AI-response"
                 )
@@ -222,34 +223,28 @@ with gr.Blocks(
                 terminal_output = gr.Textbox(
                             interactive=False,
                             container=True, show_label=False,
-                            elem_id="terminal-output"  # 为自定义样式指定ID
+                            elem_id="terminal-output"
                         )
 
-    with gr.Blocks():
-        with gr.Row(elem_classes="result-images-container"):
-            img_output_sNN = gr.HTML(
-                label="Network Diagram of Single Numbering Network",
-            ) if output_format == "svg" else gr.Image(
-                label="Network Diagram of Single Numbering Network"
-            )
-        with gr.Row(elem_classes="result-images-container"):
-            img_output_dNN = gr.HTML(
-                label="Network Diagram of Double Numbering Network",
-            ) if output_format == "svg" else gr.Image(
-                label="Network Diagram of Double Numbering Network"
-            )
+    with gr.Row(elem_classes="result-images-container"):
+        img_output_sNN = gr.HTML(
+            label="Network Diagram of Single Numbering Network",
+        ) if output_format == "svg" else gr.Image(
+            label="Network Diagram of Single Numbering Network"
+        )
+        img_output_dNN = gr.HTML(
+            label="Network Diagram of Double Numbering Network",
+        ) if output_format == "svg" else gr.Image(
+            label="Network Diagram of Double Numbering Network"
+        )
 
     # 处理函数
     image_input.change(
         fn=process_image,
         inputs=[image_input],
         outputs=[
-            response_content,
-            table_output,
-            plantuml_output,
-            img_output_sNN,
-            img_output_dNN,
-            terminal_output
+            response_content, table_output, plantuml_output,
+            img_output_sNN, img_output_dNN, terminal_output
         ],
         queue=True,
     )
