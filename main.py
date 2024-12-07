@@ -214,7 +214,7 @@ with gr.Blocks(
                 response_content = gr.Markdown(
                     label="AI Response (Markdown)",
                     container=True, show_label=True,
-                    max_height=500,
+                    max_height=150,
                     value="AI Response will appear here...",
                     elem_id="AI-response"
                 )

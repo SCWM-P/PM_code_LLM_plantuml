@@ -8,9 +8,10 @@ import yaml
 import os
 import subprocess
 import time
+from CONST import API_KEY
 client = openai.OpenAI(
     base_url="https://api.moonshot.cn/v1",
-    api_key="sk-o2r7caUcIecAst0pc06cS8tqvL0hAXSr6gxz3g8txSZyOre1",
+    api_key=API_KEY,
 )
 
 

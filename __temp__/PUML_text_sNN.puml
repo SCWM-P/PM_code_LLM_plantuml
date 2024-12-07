@@ -14,95 +14,119 @@ map Start {
 }
 map A {
     ES => 0
-    LS => 0
-    EF => 1
-    LF => 1
-    TF => 0
+    LS => 1
+    EF => 5
+    LF => 6
+    TF => 1
     FF => 0
 }
 map B {
-    ES => 1
-    LS => 3
-    EF => 3
-    LF => 5
-    TF => 2
+    ES => 0
+    LS => 0
+    EF => 10
+    LF => 10
+    TF => 0
     FF => 0
 }
 map C {
-    ES => 1
-    LS => 1
-    EF => 5
-    LF => 5
-    TF => 0
-    FF => 0
+    ES => 0
+    LS => 5
+    EF => 11
+    LF => 16
+    TF => 5
+    FF => 3
 }
 map D {
-    ES => 3
-    LS => 6
-    EF => 5
-    LF => 8
-    TF => 3
-    FF => 3
+    ES => 10
+    LS => 12
+    EF => 14
+    LF => 16
+    TF => 2
+    FF => 0
 }
 map E {
     ES => 5
-    LS => 5
-    EF => 8
-    LF => 8
-    TF => 0
-    FF => 0
+    LS => 6
+    EF => 9
+    LF => 10
+    TF => 1
+    FF => 1
 }
 map F {
-    ES => 5
-    LS => 7
-    EF => 6
-    LF => 8
+    ES => 14
+    LS => 16
+    EF => 29
+    LF => 31
     TF => 2
     FF => 2
 }
 map G {
-    ES => 8
-    LS => 8
-    EF => 13
-    LF => 13
+    ES => 10
+    LS => 10
+    EF => 31
+    LF => 31
     TF => 0
     FF => 0
 }
 map H {
-    ES => 13
-    LS => 13
-    EF => 15
-    LF => 15
-    TF => 0
-    FF => 0
+    ES => 10
+    LS => 16
+    EF => 45
+    LF => 51
+    TF => 6
+    FF => 6
 }
 map I {
-    ES => 15
-    LS => 15
-    EF => 18
-    LF => 18
+    ES => 10
+    LS => 11
+    EF => 35
+    LF => 36
+    TF => 1
+    FF => 0
+}
+map J {
+    ES => 35
+    LS => 36
+    EF => 50
+    LF => 51
+    TF => 1
+    FF => 1
+}
+map K {
+    ES => 31
+    LS => 31
+    EF => 51
+    LF => 51
     TF => 0
     FF => 0
 }
 map End {
-    ES => 18
-    LS => 18
-    EF => 18
-    LF => 18
+    ES => 51
+    LS => 51
+    EF => 51
+    LF => 51
     TF => 0
     FF => 0
 }
-Start -[thickness=5]-> A
-A --> B
-A -[thickness=5]-> C
+Start --> A
+Start -[thickness=5]-> B
+Start --> C
 B --> D
-B --> E
-C -[thickness=5]-> E
+A --> E
 C --> F
-D --> G
-E -[thickness=5]-> G
-F --> G
-G -[thickness=5]-> H
-H -[thickness=5]-> I
-I -[thickness=5]-> End
+D --> F
+B -[thickness=5]-> G
+E --> G
+B --> H
+E --> H
+B --> I
+E --> I
+F --> J
+G --> J
+I --> J
+F --> K
+G -[thickness=5]-> K
+H --> End
+J --> End
+K -[thickness=5]-> End
 @enduml

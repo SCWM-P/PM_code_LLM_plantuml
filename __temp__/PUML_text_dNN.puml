@@ -9,66 +9,107 @@ map 0 {
     latest start => 0
 }
 map End {
-    earliest start => 18
-    latest start => 18
+    earliest start => 51
+    latest start => 51
 }
 map A {
     earliest start => 0
-    latest start => 0
-}
-map B {
-    earliest start => 1
-    latest start => 3
-}
-map C {
-    earliest start => 1
     latest start => 1
 }
-map D {
-    earliest start => 3
-    latest start => 6
+map B {
+    earliest start => 0
+    latest start => 0
 }
-map virtual_E {
-    earliest start => 5
+map C {
+    earliest start => 0
     latest start => 5
+}
+map D {
+    earliest start => 10
+    latest start => 12
 }
 map E {
     earliest start => 5
-    latest start => 5
+    latest start => 6
+}
+map virtual_F {
+    earliest start => 14
+    latest start => 16
 }
 map F {
-    earliest start => 5
-    latest start => 7
+    earliest start => 14
+    latest start => 16
 }
 map virtual_G {
-    earliest start => 8
-    latest start => 8
+    earliest start => 10
+    latest start => 10
 }
 map G {
-    earliest start => 8
-    latest start => 8
+    earliest start => 10
+    latest start => 10
+}
+map virtual_H {
+    earliest start => 10
+    latest start => 16
 }
 map H {
-    earliest start => 13
-    latest start => 13
+    earliest start => 10
+    latest start => 16
+}
+map virtual_I {
+    earliest start => 10
+    latest start => 11
 }
 map I {
-    earliest start => 15
-    latest start => 15
+    earliest start => 10
+    latest start => 11
 }
-0 -[thickness=5]-> A : 初步研究 (Id=A, D=1, TF=0, FF=0)
-A --> B : 研究选点 (Id=B, D=2, TF=2, FF=0)
-A -[thickness=5]-> C : 准备调研方案 (Id=C, D=4, TF=0, FF=0)
-B --> D : 联系调研点 (Id=D, D=2, TF=3, FF=3)
-B -[dashed]-> virtual_E
-C -[dashed,thickness=5]-> virtual_E
-virtual_E -[thickness=5]-> E : 培训工作人员 (Id=E, D=3, TF=0, FF=0)
-C --> F : 准备表格 (Id=F, D=1, TF=2, FF=2)
-D -[dashed]-> virtual_G
-E -[dashed,thickness=5]-> virtual_G
-F -[dashed]-> virtual_G
-virtual_G -[thickness=5]-> G : 实地调研 (Id=G, D=5, TF=0, FF=0)
-G -[thickness=5]-> H : 写调研报告 (Id=H, D=2, TF=0, FF=0)
-H -[thickness=5]-> I : 开会汇总 (Id=I, D=3, TF=0, FF=0)
-I -[thickness=5]-> End : End (Id=End, D=0, TF=0, FF=0)
+map virtual_J {
+    earliest start => 35
+    latest start => 36
+}
+map J {
+    earliest start => 35
+    latest start => 36
+}
+map virtual_K {
+    earliest start => 31
+    latest start => 31
+}
+map K {
+    earliest start => 31
+    latest start => 31
+}
+map virtual_End {
+    earliest start => 51
+    latest start => 51
+}
+0 --> A : A (Id=A, D=5, TF=1, FF=0)
+0 -[thickness=5]-> B : B (Id=B, D=10, TF=0, FF=0)
+0 --> C : C (Id=C, D=11, TF=5, FF=3)
+B --> D : D (Id=D, D=4, TF=2, FF=0)
+A --> E : E (Id=E, D=4, TF=1, FF=1)
+C -[dashed]-> virtual_F
+D -[dashed]-> virtual_F
+virtual_F --> F : F (Id=F, D=15, TF=2, FF=2)
+B -[dashed,thickness=5]-> virtual_G
+E -[dashed]-> virtual_G
+virtual_G -[thickness=5]-> G : G (Id=G, D=21, TF=0, FF=0)
+B -[dashed]-> virtual_H
+E -[dashed]-> virtual_H
+virtual_H --> H : H (Id=H, D=35, TF=6, FF=6)
+B -[dashed]-> virtual_I
+E -[dashed]-> virtual_I
+virtual_I --> I : I (Id=I, D=25, TF=1, FF=0)
+F -[dashed]-> virtual_J
+G -[dashed]-> virtual_J
+I -[dashed]-> virtual_J
+virtual_J --> J : J (Id=J, D=15, TF=1, FF=1)
+F -[dashed]-> virtual_K
+G -[dashed,thickness=5]-> virtual_K
+virtual_K -[thickness=5]-> K : K (Id=K, D=20, TF=0, FF=0)
+H -[dashed]-> virtual_End
+J -[dashed]-> virtual_End
+K -[dashed,thickness=5]-> virtual_End
+virtual_End -[thickness=5]-> End : End (Id=End, D=0, TF=0, FF=0)
 @enduml
