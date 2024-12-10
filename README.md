@@ -45,9 +45,17 @@
 按照以下步骤运行应用程序：
 
 1. **安装依赖项**：运行`pip install -r requirements.txt`安装所有必要的库。
-2. 在当前目录下创建`CONST.py`,并写入你自己的API_KEY,例如：`API_KEY="your_api_key"`。
-3. **运行应用程序**：执行`python main.py`启动Gradio应用程序。
-4. **上传和处理图片**：一旦应用程序运行，上传图片或使用示例图片以查看转换过程的实际效果。
+2. **设定API_KEY**: 在当前目录下创建`CONST.py`,并写入你自己的API_KEY,例如：`API_KEY="your_api_key"`。
+3. **安装Java**: 如果你想要得到UML图，你需要在你的电脑上安装Java环境
+   - 对于*Windows*用户，你可以在[Java官网](https://www.java.com/zh-CN/download/)下载最新版的Java安装程序，并注意添加Java的bin路径到你的系统环境中（一般这在使用exe安装的时候是默认的）
+   - 对于*Linux*用户，以Ubuntu为例，你可以在终端输入如下命令安装最新版的Java环境：
+   ```bash
+   sudo apt-get update
+   sudo apt-get install default-jre
+   ```
+    最后，你可以在终端输入`java -version`来查看你的Java版本，如果显示了版本号，那么你的Java环境已经安装成功了🎉
+4. **运行应用程序**：执行`python main.py`启动Gradio应用程序。
+5. **上传和处理图片**：一旦应用程序运行，上传图片或使用示例图片以查看转换过程的实际效果。
 
 ## 采用的大模型
 
