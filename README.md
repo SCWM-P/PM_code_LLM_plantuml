@@ -54,6 +54,12 @@
    sudo apt-get install default-jre
    ```
     最后，你可以在终端输入`java -version`来查看你的Java版本，如果显示了版本号，那么你的Java环境已经安装成功了🎉
+    > 如果在你的Ubuntu上出现了这样的报错：
+    > ```bash
+    > Error: Dot executable does not exist
+    > Error: only sequence diagrams will be generated
+    > ```
+    > 你可以在终端输入如下命令安装Graphviz：`sudo apt-get install graphviz`
 4. **运行应用程序**：执行`python main.py`启动Gradio应用程序。
 5. **上传和处理图片**：一旦应用程序运行，上传图片或使用示例图片以查看转换过程的实际效果。
 
