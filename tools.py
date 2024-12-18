@@ -81,7 +81,7 @@ def upload_and_get_answer(image_path):
     response = ""
     # 使用Kimi的ChatCompletion API，启用流式输出
     for chunk in client.chat.completions.create(
-        model="moonshot-v1-8k",
+        model="moonshot-v1-128k",
         messages=messages,
         stream=True
     ):

@@ -1,80 +1,59 @@
 Activities:
   - Id: A
-    Duration: 5
+    Duration: 2
     Activity: 'A'
     Predecessors: []
-    Effort: 5
+    Effort: 2
     Resource: "Resource1"
 
   - Id: B
-    Duration: 10
-    Activity: "B"
+    Duration: 3
+    Activity: 'B'
     Predecessors: []
-    Effort: 10
+    Effort: 3
     Resource: "Resource2"
 
   - Id: C
-    Duration: 11
-    Activity: "C"
-    Predecessors: []
-    Effort: 11
+    Duration: 3
+    Activity: 'C'
+    Predecessors: ['A']
+    Effort: 3
     Resource: "Resource3"
 
   - Id: D
-    Duration: 4
-    Activity: "D"
-    Predecessors: ["B"]
-    Effort: 4
+    Duration: 3
+    Activity: 'D'
+    Predecessors: ['A']
+    Effort: 3
     Resource: "Resource4"
 
   - Id: E
-    Duration: 4
-    Activity: "E"
-    Predecessors: ["A"]
-    Effort: 4
+    Duration: 2
+    Activity: 'E'
+    Predecessors: ['B', 'C']
+    Effort: 2
     Resource: "Resource5"
 
   - Id: F
-    Duration: 15
-    Activity: "F"
-    Predecessors: ["C", "D"]
-    Effort: 15
+    Duration: 4
+    Activity: 'F'
+    Predecessors: ['D']
+    Effort: 4
     Resource: "Resource6"
 
   - Id: G
-    Duration: 21
-    Activity: "G"
-    Predecessors: ["B", "E"]
-    Effort: 21
+    Duration: 3
+    Activity: 'G'
+    Predecessors: ['E', 'F']
+    Effort: 3
     Resource: "Resource7"
 
   - Id: H
-    Duration: 35
-    Activity: "H"
-    Predecessors: ["B", "E"]
-    Effort: 35
+    Duration: 1
+    Activity: 'H'
+    Predecessors: ['A', 'E', 'F']
+    Effort: 1
     Resource: "Resource8"
-
-  - Id: I
-    Duration: 25
-    Activity: "I"
-    Predecessors: ["B", "E"]
-    Effort: 25
-    Resource: "Resource9"
-
-  - Id: J
-    Duration: 15
-    Activity: "J"
-    Predecessors: ["F", "G", "I"]
-    Effort: 15
-    Resource: "Resource10"
-
-  - Id: K
-    Duration: 20
-    Activity: "K"
-    Predecessors: ["F", "G"]
-    Effort: 20
-    Resource: "Resource11"
 
 Resources:
   - Id: Resource1
@@ -92,10 +71,4 @@ Resources:
   - Id: Resource7
     Pensum: 1.0
   - Id: Resource8
-    Pensum: 1.0
-  - Id: Resource9
-    Pensum: 1.0
-  - Id: Resource10
-    Pensum: 1.0
-  - Id: Resource11
     Pensum: 1.0

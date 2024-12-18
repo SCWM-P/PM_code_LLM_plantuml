@@ -9,107 +9,73 @@ map 0 {
     latest start => 0
 }
 map End {
-    earliest start => 51
-    latest start => 51
+    earliest start => 12
+    latest start => 12
 }
 map A {
     earliest start => 0
-    latest start => 1
+    latest start => 0
 }
 map B {
     earliest start => 0
-    latest start => 0
+    latest start => 4
 }
 map C {
-    earliest start => 0
-    latest start => 5
+    earliest start => 2
+    latest start => 4
 }
 map D {
-    earliest start => 10
-    latest start => 12
+    earliest start => 2
+    latest start => 2
+}
+map virtual_E {
+    earliest start => 5
+    latest start => 7
 }
 map E {
     earliest start => 5
-    latest start => 6
-}
-map virtual_F {
-    earliest start => 14
-    latest start => 16
+    latest start => 7
 }
 map F {
-    earliest start => 14
-    latest start => 16
+    earliest start => 5
+    latest start => 5
 }
 map virtual_G {
-    earliest start => 10
-    latest start => 10
+    earliest start => 9
+    latest start => 9
 }
 map G {
-    earliest start => 10
-    latest start => 10
+    earliest start => 9
+    latest start => 9
 }
 map virtual_H {
-    earliest start => 10
-    latest start => 16
+    earliest start => 9
+    latest start => 11
 }
 map H {
-    earliest start => 10
-    latest start => 16
-}
-map virtual_I {
-    earliest start => 10
+    earliest start => 9
     latest start => 11
-}
-map I {
-    earliest start => 10
-    latest start => 11
-}
-map virtual_J {
-    earliest start => 35
-    latest start => 36
-}
-map J {
-    earliest start => 35
-    latest start => 36
-}
-map virtual_K {
-    earliest start => 31
-    latest start => 31
-}
-map K {
-    earliest start => 31
-    latest start => 31
 }
 map virtual_End {
-    earliest start => 51
-    latest start => 51
+    earliest start => 12
+    latest start => 12
 }
-0 --> A : A (Id=A, D=5, TF=1, FF=0)
-0 -[thickness=5]-> B : B (Id=B, D=10, TF=0, FF=0)
-0 --> C : C (Id=C, D=11, TF=5, FF=3)
-B --> D : D (Id=D, D=4, TF=2, FF=0)
-A --> E : E (Id=E, D=4, TF=1, FF=1)
-C -[dashed]-> virtual_F
-D -[dashed]-> virtual_F
-virtual_F --> F : F (Id=F, D=15, TF=2, FF=2)
-B -[dashed,thickness=5]-> virtual_G
+0 -[thickness=5]-> A : A (Id=A, D=2, TF=0, FF=0)
+0 --> B : B (Id=B, D=3, TF=4, FF=2)
+A --> C : C (Id=C, D=3, TF=2, FF=0)
+A -[thickness=5]-> D : D (Id=D, D=3, TF=0, FF=0)
+B -[dashed]-> virtual_E
+C -[dashed]-> virtual_E
+virtual_E --> E : E (Id=E, D=2, TF=2, FF=2)
+D -[thickness=5]-> F : F (Id=F, D=4, TF=0, FF=0)
 E -[dashed]-> virtual_G
-virtual_G -[thickness=5]-> G : G (Id=G, D=21, TF=0, FF=0)
-B -[dashed]-> virtual_H
+F -[dashed,thickness=5]-> virtual_G
+virtual_G -[thickness=5]-> G : G (Id=G, D=3, TF=0, FF=0)
+A -[dashed]-> virtual_H
 E -[dashed]-> virtual_H
-virtual_H --> H : H (Id=H, D=35, TF=6, FF=6)
-B -[dashed]-> virtual_I
-E -[dashed]-> virtual_I
-virtual_I --> I : I (Id=I, D=25, TF=1, FF=0)
-F -[dashed]-> virtual_J
-G -[dashed]-> virtual_J
-I -[dashed]-> virtual_J
-virtual_J --> J : J (Id=J, D=15, TF=1, FF=1)
-F -[dashed]-> virtual_K
-G -[dashed,thickness=5]-> virtual_K
-virtual_K -[thickness=5]-> K : K (Id=K, D=20, TF=0, FF=0)
+F -[dashed]-> virtual_H
+virtual_H --> H : H (Id=H, D=1, TF=2, FF=2)
+G -[dashed,thickness=5]-> virtual_End
 H -[dashed]-> virtual_End
-J -[dashed]-> virtual_End
-K -[dashed,thickness=5]-> virtual_End
 virtual_End -[thickness=5]-> End : End (Id=End, D=0, TF=0, FF=0)
 @enduml
