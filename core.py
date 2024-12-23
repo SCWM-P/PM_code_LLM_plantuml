@@ -95,7 +95,7 @@ class LinkedList:
         return nodes
 
     def __str__(self):
-        return "\n".join([node.id for node in self.get_nodes_value()])
+        return "->".join([node.id for node in self.get_nodes_value()])
 
 
 def path_search(linked_list: LinkedList, next_nodes_func: callable = lambda x: x.out_node):
@@ -222,6 +222,10 @@ def core_calculate(yaml_path: Path):
     for path in path_list:
         if all([node.activity.TF == 0 for node in path.get_nodes_value()]):
             key_path_list.append(path)
+    key_path_with_time = zip(key_path_list, [sum([node.activity.Effort for node in path.get_nodes_value()]) for path in key_path_list])
+    max_time = max([time for path, time in copy.deepcopy(key_path_with_time)])
+    key_path_list = []
+    key_path_list = [path for path, time in key_path_with_time if time == max_time]
 
     return activity_dict, node_dict, path_list, key_path_list
 

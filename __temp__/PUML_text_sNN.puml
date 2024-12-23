@@ -61,26 +61,26 @@ map F {
     FF => 0
 }
 map G {
-    ES => 9
-    LS => 9
-    EF => 12
-    LF => 12
-    TF => 0
-    FF => 0
-}
-map H {
-    ES => 9
-    LS => 11
-    EF => 10
-    LF => 12
+    ES => 5
+    LS => 7
+    EF => 8
+    LF => 10
     TF => 2
     FF => 2
 }
+map H {
+    ES => 9
+    LS => 9
+    EF => 10
+    LF => 10
+    TF => 0
+    FF => 0
+}
 map End {
-    ES => 12
-    LS => 12
-    EF => 12
-    LF => 12
+    ES => 10
+    LS => 10
+    EF => 10
+    LF => 10
     TF => 0
     FF => 0
 }
@@ -91,11 +91,10 @@ A -[thickness=5]-> D
 B --> E
 C --> E
 D -[thickness=5]-> F
-E --> G
-F -[thickness=5]-> G
+D --> G
 A --> H
 E --> H
-F --> H
-G -[thickness=5]-> End
-H --> End
+F -[thickness=5]-> H
+G --> End
+H -[thickness=5]-> End
 @enduml
