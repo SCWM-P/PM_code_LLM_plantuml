@@ -44,7 +44,7 @@ Activities:
   - Id: G
     Duration: 3
     Activity: 'G'
-    Predecessors: ['E', 'F']
+    Predecessors: ['D']
     Effort: 3
     Resource: "Resource7"
 
