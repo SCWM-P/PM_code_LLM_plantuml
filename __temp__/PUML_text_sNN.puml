@@ -15,86 +15,95 @@ map Start {
 map A {
     ES => 0
     LS => 0
-    EF => 2
-    LF => 2
+    EF => 3
+    LF => 3
     TF => 0
     FF => 0
 }
 map B {
-    ES => 0
-    LS => 4
-    EF => 3
-    LF => 7
-    TF => 4
-    FF => 2
-}
-map C {
-    ES => 2
-    LS => 4
-    EF => 5
-    LF => 7
-    TF => 2
-    FF => 0
-}
-map D {
-    ES => 2
-    LS => 2
-    EF => 5
-    LF => 5
-    TF => 0
-    FF => 0
-}
-map E {
-    ES => 5
-    LS => 7
+    ES => 3
+    LS => 5
     EF => 7
     LF => 9
     TF => 2
-    FF => 2
+    FF => 0
 }
-map F {
-    ES => 5
-    LS => 5
+map C {
+    ES => 3
+    LS => 3
     EF => 9
     LF => 9
     TF => 0
     FF => 0
 }
+map D {
+    ES => 9
+    LS => 9
+    EF => 17
+    LF => 17
+    TF => 0
+    FF => 0
+}
+map E {
+    ES => 7
+    LS => 12
+    EF => 12
+    LF => 17
+    TF => 5
+    FF => 5
+}
+map F {
+    ES => 9
+    LS => 15
+    EF => 13
+    LF => 19
+    TF => 6
+    FF => 4
+}
 map G {
-    ES => 5
-    LS => 7
-    EF => 8
-    LF => 10
+    ES => 17
+    LS => 17
+    EF => 23
+    LF => 23
+    TF => 0
+    FF => 0
+}
+map H {
+    ES => 17
+    LS => 19
+    EF => 21
+    LF => 23
     TF => 2
     FF => 2
 }
-map H {
-    ES => 9
-    LS => 9
-    EF => 10
-    LF => 10
+map I {
+    ES => 23
+    LS => 23
+    EF => 28
+    LF => 28
     TF => 0
     FF => 0
 }
 map End {
-    ES => 10
-    LS => 10
-    EF => 10
-    LF => 10
+    ES => 28
+    LS => 28
+    EF => 28
+    LF => 28
     TF => 0
     FF => 0
 }
 Start -[thickness=5]-> A
-Start --> B
-A --> C
-A -[thickness=5]-> D
+A --> B
+A -[thickness=5]-> C
+B --> D
+C -[thickness=5]-> D
 B --> E
-C --> E
-D -[thickness=5]-> F
-D --> G
-A --> H
-E --> H
-F -[thickness=5]-> H
-G --> End
-H -[thickness=5]-> End
+C --> F
+D -[thickness=5]-> G
+E --> G
+D --> H
+F --> H
+G -[thickness=5]-> I
+H --> I
+I -[thickness=5]-> End
 @enduml

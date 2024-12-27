@@ -8,18 +8,21 @@ import yaml
 import os
 import subprocess
 import time
+import base64
 from CONST import API_KEY
+# BASE_URL = "https://api.moonshot.cn/v1"
+BASE_URL = "https://api.openai.com/v1"
 client = openai.OpenAI(
-    base_url="https://api.moonshot.cn/v1",
+    base_url=BASE_URL,
     api_key=API_KEY,
 )
 
 
 def upload_and_get_answer(image_path):
-    def _upload_files(files: List[str]) -> List[Dict[str, Any]]:
+    def _upload_files(files: List[str], purpose) -> List[Dict[str, Any]]:
         messages = []
         for file in files:
-            file_object = client.files.create(file=Path(file), purpose="file-extract")
+            file_object = client.files.create(file=Path(file), purpose=purpose)
             file_content = client.files.content(file_id=file_object.id).text
             messages.append({
                 "role": "system",
@@ -28,22 +31,18 @@ def upload_and_get_answer(image_path):
         return messages
 
     print("------------------------------1、调用Kimi API将图片转换为YAML格式的Markdown------------------------------")
-    file_messages = _upload_files(files=["core.py", image_path])
-    messages = [
-        *file_messages,
-        {
+    prompt = [{
             "role": "system",
             "content":
-                "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，"
-                "准确的回答。同时，你会拒绝一切涉及恐怖主义，种族歧视，黄色暴力等问题的回答。Moonshot AI 为专有名词，"
-                "不可翻译成其他语言。"
+                "你是人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，"
+                "准确的回答。同时，你会拒绝一切涉及恐怖主义，种族歧视，黄色暴力等问题的回答。"
                 "你尽可能回复关键信息，避免废话。",
         },
         {
             "role": "user",
             "content":
                 '''
-                    请将图片中的内容转换为这个代码需要的YAML文件和markdown格式的表格,YAML文件请参考如下格式：
+                    请将图片中的内容转换为需要的YAML文件和markdown格式的表格,YAML文件请参考如下格式：
                     Activities:\n
                     - Id: A\n
                     Duration: 5\n
@@ -77,19 +76,56 @@ def upload_and_get_answer(image_path):
                 '''
         },
     ]
+    if "openai" in BASE_URL:
+        # Function to encode the image
+        def encode_image(image_path):
+            with open(image_path, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode("utf-8")
+        # Encode the image
+        image_data = encode_image(image_path)
+        messages = [
+            *prompt,
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/jpeg;base64,{image_data}"},
+                    },
+                ],
+            },
+        ]
+    else:
+        file_messages = _upload_files(files=["core.py", image_path], purpose="file-extract")
+        messages = [
+            *prompt,
+            *file_messages,
+        ]
 
     response = ""
-    # 使用Kimi的ChatCompletion API，启用流式输出
-    for chunk in client.chat.completions.create(
-        model="moonshot-v1-128k",
-        messages=messages,
-        stream=True
-    ):
-        delta = chunk.choices[0].delta
-        if delta.content:
-            response += delta.content
-            print(delta.content, end='', flush=True)
-            yield response
+    # 使用ChatCompletion API，启用流式输出
+    if "openai" in BASE_URL:
+        for chunk in client.chat.completions.create(
+            model="chatgpt-4o-latest",
+            messages=messages,
+            stream=True
+        ):
+            delta = chunk.choices[0].delta
+            if delta.content:
+                response += delta.content
+                print(delta.content, end='', flush=True)
+                yield response
+    else:
+        for chunk in client.chat.completions.create(
+            model="moonshot-v1-128k",
+            messages=messages,
+            stream=True
+        ):
+            delta = chunk.choices[0].delta
+            if delta.content:
+                response += delta.content
+                print(delta.content, end='', flush=True)
+                yield response
 
 
 def get_yaml(markdown_content, yaml_path: Path = "__temp__/output_format.yaml"):

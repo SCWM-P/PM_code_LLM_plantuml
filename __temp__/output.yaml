@@ -1,74 +1,91 @@
 Activities:
   - Id: A
-    Duration: 2
-    Activity: 'A'
+    Duration: 3
+    Activity: "A"
     Predecessors: []
-    Effort: 2
-    Resource: "Resource1"
+    Effort: 3
+    Resource: "ResourceA"
 
   - Id: B
-    Duration: 3
-    Activity: 'B'
-    Predecessors: []
-    Effort: 3
-    Resource: "Resource2"
+    Duration: 4
+    Activity: "B"
+    Predecessors: ["A"]
+    Effort: 4
+    Resource: "ResourceB"
 
   - Id: C
-    Duration: 3
-    Activity: 'C'
-    Predecessors: ['A']
-    Effort: 3
-    Resource: "Resource3"
+    Duration: 6
+    Activity: "C"
+    Predecessors: ["A"]
+    Effort: 6
+    Resource: "ResourceC"
 
   - Id: D
-    Duration: 3
-    Activity: 'D'
-    Predecessors: ['A']
-    Effort: 3
-    Resource: "Resource4"
+    Duration: 8
+    Activity: "D"
+    Predecessors: ["B", "C"]
+    Effort: 8
+    Resource: "ResourceD"
 
   - Id: E
-    Duration: 2
-    Activity: 'E'
-    Predecessors: ['B', 'C']
-    Effort: 2
-    Resource: "Resource5"
+    Duration: 5
+    Activity: "E"
+    Predecessors: ["B"]
+    Effort: 5
+    Resource: "ResourceE"
 
   - Id: F
     Duration: 4
-    Activity: 'F'
-    Predecessors: ['D']
+    Activity: "F"
+    Predecessors: ["C"]
     Effort: 4
-    Resource: "Resource6"
+    Resource: "ResourceF"
 
   - Id: G
-    Duration: 3
-    Activity: 'G'
-    Predecessors: ['D']
-    Effort: 3
-    Resource: "Resource7"
+    Duration: 6
+    Activity: "G"
+    Predecessors: ["D", "E"]
+    Effort: 6
+    Resource: "ResourceG"
 
   - Id: H
-    Duration: 1
-    Activity: 'H'
-    Predecessors: ['A', 'E', 'F']
-    Effort: 1
-    Resource: "Resource8"
+    Duration: 4
+    Activity: "H"
+    Predecessors: ["D", "F"]
+    Effort: 4
+    Resource: "ResourceH"
+
+  - Id: I
+    Duration: 5
+    Activity: "I"
+    Predecessors: ["G", "H"]
+    Effort: 5
+    Resource: "ResourceI"
 
 Resources:
-  - Id: Resource1
+  - Id: ResourceA
     Pensum: 1.0
-  - Id: Resource2
+
+  - Id: ResourceB
     Pensum: 1.0
-  - Id: Resource3
+
+  - Id: ResourceC
     Pensum: 1.0
-  - Id: Resource4
+
+  - Id: ResourceD
     Pensum: 1.0
-  - Id: Resource5
+
+  - Id: ResourceE
     Pensum: 1.0
-  - Id: Resource6
+
+  - Id: ResourceF
     Pensum: 1.0
-  - Id: Resource7
+
+  - Id: ResourceG
     Pensum: 1.0
-  - Id: Resource8
+
+  - Id: ResourceH
+    Pensum: 1.0
+
+  - Id: ResourceI
     Pensum: 1.0

@@ -211,7 +211,7 @@ with gr.Blocks(
 
         with gr.Column(scale=1):
             # 右侧列
-            with gr.Accordion("Kimi Response", open=True):
+            with gr.Accordion("ChatGPT Response" if "openai" in tl.BASE_URL else "Kimi Response", open=True):
                 response_content = gr.Markdown(
                     label="AI Response (Markdown)",
                     container=True, show_label=True,
