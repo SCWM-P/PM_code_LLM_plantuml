@@ -30,7 +30,7 @@ def upload_and_get_answer(image_path):
             })
         return messages
 
-    print("------------------------------1、调用Kimi API将图片转换为YAML格式的Markdown------------------------------")
+    print("------------------------------1、调用LLM API将图片转换为YAML格式的Markdown------------------------------")
     prompt = [{
             "role": "system",
             "content":

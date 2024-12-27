@@ -63,9 +63,17 @@
 4. **运行应用程序**：执行`python main.py`启动Gradio应用程序。
 5. **上传和处理图片**：一旦应用程序运行，上传图片或使用示例图片以查看转换过程的实际效果。
 
+以上的说明针对默认使用Kimi的能力进行处理，如果你想使用原生的OpenAI API使用更高级的ChatGPT模型，请额外进行以下步骤：
+1. 在`tools.py`中，将BASE_URL更换注释项为`BASE_URL = "https://api.openai.com/v1/"`
+2. 在`CONST.py`中，将API_KEY更换为你的OpenAI API_KEY，获得方法请参考[OpenAI Platform](https://platform.openai.com/docs/guides/authentication)
+3. 重启`main.py`，即可使用OpenAI的API进行处理
+
 ## 采用的大模型
 
 本项目采用了兼容[Kimi大模型](https://platform.moonshot.cn/)的API，请将密钥明文填写在CONST.py中，并在遵守相关地区法律和月之暗面公司使用许可的范围内使用该大模型的能力。
+
+此外如果您自行配置了[OpenAI](https://platform.openai.com/docs/)的API，也请遵守OpenAI的使用规范。
+> 注意：请勿将您的API密钥公开，以防止他人滥用。
 
 ## 贡献
 
